@@ -127,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ]),
             const SizedBox(height: 16),
 
-            // Contact Information
+           /* // Contact Information
             _buildSectionTitle('Contact Information'),
             _buildInfoCard([
               _buildInfoRow('Email', user!.email!),
@@ -174,7 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildInfoCard([
               _buildInfoRow('user! Agent', user!.userAgent!),
               _buildInfoRow('Role', user!.role!),
-            ]),
+            ]),*/
           ],
         ),
       ),
@@ -197,23 +197,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Text(
-            '@${user!.username}',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
-          ),
-          Chip(
-            label: Text(user!.role!.toUpperCase()),
-            backgroundColor: user!.role == 'admin'
-                ? Colors.red.withOpacity(0.2)
-                : Colors.blue.withOpacity(0.2),
-            labelStyle: TextStyle(
-              color: user!.role == 'admin' ? Colors.red : Colors.blue,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          // Text(
+          //   '@${user!.username}',
+          //   style: TextStyle(
+          //     fontSize: 16,
+          //     color: Colors.grey[600],
+          //   ),
+          // ),
+          // Chip(
+          //   label: Text(user!.role!.toUpperCase()),
+          //   backgroundColor: user!.role == 'admin'
+          //       ? Colors.red.withOpacity(0.2)
+          //       : Colors.blue.withOpacity(0.2),
+          //   labelStyle: TextStyle(
+          //     color: user!.role == 'admin' ? Colors.red : Colors.blue,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
         ],
       ),
     );
@@ -224,10 +224,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Text(
         title,
-        style: const TextStyle(
+        style:  TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: Colors.blue,
+          color: AppColors.primaryColorDark,
         ),
       ),
     );
