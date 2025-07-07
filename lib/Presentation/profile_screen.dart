@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:time_dignitor_task/Data/Model/profile_response.dart';
-import 'package:time_dignitor_task/Logic/Login/login_cubit.dart';
+import 'package:time_dignitor_task/Logic/Product/product_cubit.dart';
 import 'package:time_dignitor_task/Logic/Profile/profile_cubit.dart';
 import 'package:time_dignitor_task/Logic/Profile/profile_state.dart';
-import 'package:time_dignitor_task/Presentation/login_screen.dart';
+import 'package:time_dignitor_task/Presentation/product_list.dart';
 import 'package:time_dignitor_task/Utils/AppColor.dart';
-import 'package:time_dignitor_task/Utils/AppHeader.dart';
 import 'package:time_dignitor_task/Utils/GlobalSnackbar.dart';
 import 'package:time_dignitor_task/Utils/MyAlertDialogBox.dart';
 import 'package:time_dignitor_task/Utils/ProgressDialog.dart';
@@ -37,52 +36,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileCubit,ProfileState>(
-      listener: (context, state) {
-        if(state is ProfileLoadingState){
-          ProgressDialog.show(context);
-        }
-        else if(state is ProfileLoadedState){
-          ProgressDialog.hide(context);
-          user = state.response;
-        }
-        else if(state is ProfileErrorState){
-          ProgressDialog.hide(context);
-          GlobalSnackbar.showError(context, state.error);
-        }
-
-      },
-      builder: (context, state) {
-        if(state is ProfileLoadedState){
-          return profileScreenUi();
-        }
-        else{
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
-  }
-
-  Widget profileScreenUi(){
     return Scaffold(
       appBar: AppBar(
-      backgroundColor: AppColors.primaryColorDark,
-      automaticallyImplyLeading: false,
-      centerTitle: true,
-      title: Text('Profile',
-        style: const TextStyle(
-          color: AppColors.white,
-          fontSize: 20.0,
-          fontWeight: FontWeight.bold,
+        backgroundColor: AppColors.primaryColorDark,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Text('Profile',
+          style: const TextStyle(
+            color: AppColors.white,
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.logout, color: AppColors.white),
-          onPressed: () {
-            MyAlertDialogBox.showMyAlertDialog(context, "Confirmation", "Are you sure want to logout?",
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout, color: AppColors.white),
+            onPressed: () {
+              MyAlertDialogBox.showMyAlertDialog(context, "Confirmation", "Are you sure want to logout?",
                 onPositiveButtonClick:() {
                   //Navigate to profile screen
                   sp.removeAccessToken();
@@ -97,13 +67,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   //   );
                   // });
                 },
-              positiveButtonText: "Yes",negativeButtonText: "No",
+                positiveButtonText: "Yes",negativeButtonText: "No",
+              );
+            },
+          ),
+        ],
+      ),
+      body: BlocConsumer<ProfileCubit,ProfileState>(
+        listener: (context, state) {
+          if(state is ProfileLoadingState){
+            ProgressDialog.show(context);
+          }
+          else if(state is ProfileLoadedState){
+            ProgressDialog.hide(context);
+            user = state.response;
+          }
+          else if(state is ProfileErrorState){
+            ProgressDialog.hide(context);
+            GlobalSnackbar.showError(context, state.error);
+          }
+
+        },
+        builder: (context, state) {
+          if(state is ProfileLoadedState){
+            return profileScreenUi();
+          }
+          else{
+            return Center(
+              child: CircularProgressIndicator(),
             );
-          },
-        ),
-      ],
-    ),
-      body: SingleChildScrollView(
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Navigator.push(context,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                create: (context) => ProductCubit(),
+                child: ProductsListScreen(),
+              ),
+            )
+        );
+      },
+        elevation: 8,
+        tooltip: "Product",
+        child: const Icon(Icons.shopping_bag_outlined),
+      ),
+    );
+  }
+
+  Widget profileScreenUi(){
+    return SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,8 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ]),*/
           ],
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildProfileHeader() {
